@@ -1,0 +1,32 @@
+{
+  "name": "jsjoust",
+  "version": "0.0.1",
+  "description": "A JS version of JSJoust using PouchDB to store game state",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "nodemon -e js,jade index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ukmadlz/JSjoust.git"
+  },
+  "author": "Mike Elsmore <mike.elsmore@uk.ibm.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ukmadlz/JSjoust/issues"
+  },
+  "homepage": "https://github.com/ukmadlz/JSjoust#readme",
+  "dependencies": {
+    "bell": "^6.0.0",
+    "dateformat": "^1.0.12",
+    "dotenv": "^1.2.0",
+    "hapi": "^12.0.0",
+    "hapi-auth-cookie": "^3.1.0",
+    "inert": "^3.2.0",
+    "jade": "^1.11.0",
+    "vision": "^4.0.1",
+    "yar": "^6.0.0"
+  }
+}

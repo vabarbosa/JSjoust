@@ -1,7 +1,7 @@
 'use strict';
 
 // Config
-require('dotenv').load({silent: true});
+require('dotenv').load({ silent: true });
 
 // Libs
 var Hapi           = require('hapi');
@@ -32,7 +32,7 @@ var server = new Hapi.Server({
 
 // Set Hapi Connections
 server.connection({
-  host: process.env.VCAP_APP_HOST || 'localhost',
+  // host: process.env.VCAP_APP_HOST || 'localhost',
   port: process.env.VCAP_APP_PORT || process.env.PORT || 3000,
 });
 
@@ -40,45 +40,46 @@ server.connection({
 server.log(['error', 'database', 'read']);
 
 // Hapi Plugins
-var hapiErr = function(err) {
+var hapiErr = function (err) {
   if (err) console.log(err);
-}
+};
+
 server.register(Inert, hapiErr);
 server.register(Vision, hapiErr);
 server.register({
-    register: Yar,
-    options: {
-        storeBlank: false,
-        cookieOptions: {
-            password: 'cookie_encryption_password',
-            isSecure: false
-        }
-    }
+  register: Yar,
+  options: {
+    storeBlank: false,
+    cookieOptions: {
+      password: 'cookie_encryption_password',
+      isSecure: false,
+    },
+  },
 }, hapiErr);
 
 // Templating
 server.views({
-    engines: { jade: require('jade') },
-    path: Path.join(__dirname, 'views'),
-    compileOptions: {
-        pretty: true
-    }
+  engines: { jade: require('jade') },
+  path: Path.join(__dirname, 'views'),
+  compileOptions: {
+    pretty: true,
+  },
 });
 
 // Auth
 server.register(Bell, hapiErr);
 server.register(HapiAuthCookie, hapiErr);
 server.auth.strategy('jsjoust-cookie', 'cookie', {
-    cookie: 'jsjoust-cookie',
-    password: 'cookie_encryption_password',
-    isSecure: process.env.HTTPS || true
+  cookie: 'jsjoust-cookie',
+  password: 'cookie_encryption_password',
+  isSecure: process.env.HTTPS || true,
 });
 server.auth.strategy('twitter', 'bell', {
-    provider: 'twitter',
-    password: 'cookie_encryption_password',
-    clientId: process.env.TWITTER_ID,
-    clientSecret: process.env.TWITTER_SECRET,
-    isSecure: process.env.HTTPS || true
+  provider: 'twitter',
+  password: 'cookie_encryption_password',
+  clientId: process.env.TWITTER_ID,
+  clientSecret: process.env.TWITTER_SECRET,
+  isSecure: process.env.HTTPS || true,
 });
 server.register(require('./routes/auth'), hapiErr);
 
@@ -89,24 +90,40 @@ server.route({
   config: {
     auth: {
       mode: 'try',
-      strategy: 'jsjoust-cookie'
+      strategy: 'jsjoust-cookie',
     },
     plugins: {
       'hapi-auth-cookie': {
-        redirectTo: false
-      }
+        redirectTo: false,
+      },
     },
     handler: (request, reply) => {
       reply.view('Index', {
         title: 'Start | Hapi ' + request.server.version,
-        message: 'Yo Bro!'
+        message: 'Yo Bro!',
       });
-    }
-  }
+    },
+  },
+});
+
+// Routes
+server.register(require('./routes/game'), hapiErr);
+
+// Static files
+server.route({
+  method: 'GET',
+  path: '/{param*}',
+  handler: {
+    directory: {
+      path: '.',
+      redirectToSlash: true,
+      index: true,
+    },
+  },
 });
 
 // Start Hapi
-server.start(function(err) {
+server.start(function (err) {
   if (err) {
     console.log(err);
   } else {

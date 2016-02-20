@@ -3,13 +3,14 @@ extends Layout
 block content
     .row
         .col-md-12
-          h1 Waiting For Game
+          h1 Game Over
           ul#players
+          h2 Players Left
+           strong#playersLeft
     style
       | .join { background: green }
       | .lost { background: red }
     script(type="text/javascript")
-      | var twitterUser = '#{username}';
+      | var gameDBName = '#{gamedb}';
     script(type="text/javascript", src="//cdn.jsdelivr.net/pouchdb/5.2.1/pouchdb.min.js")
-    script(type="text/javascript", src="https://js.pusher.com/3.0/pusher.min.js")
-    script(type="text/javascript", src="/game.js")
+    script(type="text/javascript", src="/gameover.js")

@@ -108,6 +108,7 @@ server.route({
 
 // Routes
 server.register(require('./routes/game'), hapiErr);
+server.register(require('./routes/keygen'), hapiErr);
 
 // Static files
 server.route({

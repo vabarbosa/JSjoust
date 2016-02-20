@@ -35,7 +35,7 @@ module.exports = function (server) {
 
           var gameDB = 'gamedb_' + Date.now();
 
-          request.get('https://droidconro.eu-gb.mybluemix.net?user=' + gameDB, function (err, response, body) {
+          request.get('/keygen?user=' + gameDB, function (err, response, body) {
 
             pusher.trigger('jsjoust-channel', 'join', {
               gameDb: gameDB,

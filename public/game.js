@@ -31,7 +31,7 @@ $(document).ready(function () {
   });
 
   var joinGame = function (gameDB) {
-    var api = 'https://droidconro.eu-gb.mybluemix.net?user=' + gameDB;
+    var api = '/keygen?user=' + gameDB;
     $.get(api, function (data) {
       localStorage.setItem('url', data.url);
       var url = data.url;

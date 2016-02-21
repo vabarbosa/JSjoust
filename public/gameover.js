@@ -70,7 +70,10 @@ $(document).ready(function () {
                 });
                 state = GAMEOVER;
                 $('h1').html('Winner is ' + winnerArray[0]);
+                var api = '/leaderboard/' + winnerArray[0] + '/' + gameDBName;
+                $.post(api, function (data) {
 
+                });
               });
             });
           }

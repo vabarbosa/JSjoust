@@ -1,0 +1,12 @@
+extends Layout
+
+block content
+    .row
+        .col-md-12
+          h1.text-center Leaderboard
+    .row
+      .col-md-12
+        #leaderboard
+    script(type="text/javascript", src="//cdn.jsdelivr.net/pouchdb/5.2.1/pouchdb.min.js")
+    script(type="text/javascript", src="https://js.pusher.com/3.0/pusher.min.js")
+    script(type="text/javascript", src="/leaderboard.js")

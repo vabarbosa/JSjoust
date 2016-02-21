@@ -69,7 +69,8 @@ $(document).ready(function () {
                   console.log(err);
                 });
                 state = GAMEOVER;
-                alert('Winner is ' + winnerArray[0]);
+                $('h1').html('Winner is ' + winnerArray[0]);
+
               });
             });
           }

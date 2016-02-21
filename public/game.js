@@ -4,7 +4,8 @@ $(document).ready(function () {
   var LOADING = 0;
   var READY = 1;
   var STARTED = 2;
-  var LOST = 3;
+  var SAFE = 3;
+  var LOST = 4;
   var state = LOADING;
 
   // Enable pusher logging - don't include this in production
@@ -119,7 +120,7 @@ $(document).ready(function () {
             distance = scale(distance);
 
             // Display the changes
-            $('h1').html(distance);
+            console.log(distance);
             $('body').css('background', colour(distance));
 
             // Knock you out
@@ -158,6 +159,16 @@ $(document).ready(function () {
         console.log('Game Over');
         window.location.href = '/gameover/' + localDB;
       });
+
+      channel.bind('safe-' + localDB, function (data) {
+        console.log('You can move more');
+        state = SAFE;
+      });
+
+      channel.bind('notsafe-' + localDB, function (data) {
+        console.log('Ow Shit, stop moving!');
+        state = STARTED;
+      });
     });
   };
 
@@ -178,6 +189,6 @@ $(document).ready(function () {
 
   // If you go to fast
   var tooFast = function tooFast(s) {
-    return (s >= 1) ? true : false;
+    return (s >= 1 && state !== SAFE) ? true : false;
   };
 });

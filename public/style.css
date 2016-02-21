@@ -5,6 +5,14 @@
   top: 50%;
   transform: translateY(-50%);
 }
+/* Game Page */
+ul#players {
+  padding: 0;
+  list-style-type: none;
+}
+ul#players li {
+  padding: 1rem;
+}
 /* Game State */
 .join { background: green; }
 .lost { background: red; }

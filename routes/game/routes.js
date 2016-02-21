@@ -31,6 +31,7 @@ module.exports = function (server) {
         auth: 'jsjoust-cookie',
         handler: (req, reply) => {
           reply.view('Game', {
+            title: 'Game On!',
             username: req.auth.credentials.username,
             appname: process.env.APPNAME,
           });
@@ -90,6 +91,7 @@ module.exports = function (server) {
         auth: 'jsjoust-cookie',
         handler: function (request, reply) {
           reply.view('GameOver', {
+            title: 'Game Over',
             gamedb: request.params.gamedb,
             appname: process.env.APPNAME,
           });

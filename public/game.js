@@ -21,7 +21,7 @@ $(document).ready(function () {
   var channel = pusher.subscribe('jsjoust-channel');
 
   channel.bind('join', function (data) {
-    var joinGameLink = '<a class=\"join-game\" data-game-db=\"' + data.gameDb + '\">Join Game</a>';
+    var joinGameLink = '<a class=\"btn btn-primary join-game\" data-game-db=\"' + data.gameDb + '\">Join Game</a>';
     $('h1').html(joinGameLink);
     $('.join-game').on('click', function (e) {
       e.preventDefault();
@@ -74,8 +74,6 @@ $(document).ready(function () {
         include_docs: true,
       }).on('change', function (change) {
         // handle change
-
-        $('ul#players').append(JSON.stringify(change));
         var username = change.doc.twitter;
         if (username) {
           var status   = change.doc.status;
@@ -89,7 +87,7 @@ $(document).ready(function () {
             }
           } else {
             var li = '<li data-twitter=\"' + username + '\" class=\"' + status + '\">';
-            li += '<img width=\"50px\" src=\"https://avatars.io/twitter/' + username + '\" />';
+            li += '<img class=\"img-circle\" width=\"50px\" src=\"https://avatars.io/twitter/' + username + '\" />';
             li += '<strong>' + username + '</strong>';
             li += '</li>';
             $('ul#players').append(li);

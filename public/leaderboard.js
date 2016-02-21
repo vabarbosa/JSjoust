@@ -1,4 +1,24 @@
 $(document).ready(function () {
+
+  // Get people to join
+  $('#asktojoin').on('click', function(e) {
+    e.preventDefault();
+    $('#asktojoin').addClass('disabled');
+    var joinurl = '/join';
+    $.get(joinurl, function (data) {
+      $('#startgame').removeClass('disabled');
+      var gameDB = data.gameDb;
+      // Start the game
+      $('#startgame').on('click', function (err, data) {
+        $('#startgame').addClass('disabled');
+        var starturl = '/start/' + gameDB;
+        $.get(starturl, function (data) {
+          $('#asktojoin').removeClass('disabled');
+        });
+      });
+    });
+  });
+
   var Leaderboard = PouchDB('leaderboard');
   var api = '/keygen?user=leaderboard';
   $.get(api, function (data) {
@@ -41,9 +61,9 @@ $(document).ready(function () {
         $('div[data-twitter="' + username + '"] .score').html(change.value)
       } else {
         var li = '<div class="row" data-twitter=\"' + username + '\">';
-        li += '<div class="col-md-3" ><img width="100%" src=\"https://avatars.io/twitter/' + username + '\" class=" img-circle" /></div>';
-        li += '<div class="col-md-7" ><strong>' + username + '</strong></div>'
-        li += '<div class="col-md-2"><strong class="score" >' + change.value + '</strong></div>';
+        li += '<div class="col-md-2" ><img width="100%" src=\"https://avatars.io/twitter/' + username + '\" class=" img-circle" /></div>';
+        li += '<div class="col-md-7" ><h2>' + username + '</h2></div>'
+        li += '<div class="col-md-2 text-center"><h1 class="score" >' + change.value + '</h1></div>';
         li += '</div>';
         $('#leaderboard').append(li);
       }

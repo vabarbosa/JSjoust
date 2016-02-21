@@ -39,7 +39,7 @@ $(document).ready(function () {
           group: true,
           group_level: 1
         }, function (err, data) {
-          var playersLost = data.rows[0].value;
+          var playersLost = (data.rows.length) ? data.rows[0].value : 0;
           $('#playersLeft').html(' ' + (playersJoined - playersLost));
 
           if ((playersJoined - playersLost) === 1 &&
@@ -64,7 +64,7 @@ $(document).ready(function () {
                   timestamp: Date.now(),
                 }).then(function (response) {
                   // handle response
-                  console.log('Everyone Informed of loss');
+                  console.log('Everyone Informed of Win');
                 }).catch(function (err) {
                   console.log(err);
                 });
@@ -72,7 +72,7 @@ $(document).ready(function () {
                 $('h1').html('Winner is ' + winnerArray[0]);
                 var api = '/leaderboard/' + winnerArray[0] + '/' + gameDBName;
                 $.post(api, function (data) {
-
+                  $('#playersLeftArea').remove();
                 });
               });
             });
@@ -112,7 +112,7 @@ var addGameItem = function (change) {
       }
     } else {
       var li = '<li data-twitter=\"' + username + '\" class=\"' + status + '\">';
-      li += '<img width=\"50px\" src=\"https://avatars.io/twitter/' + username + '\" />';
+      li += '<img class=\"img-circle\" width=\"50px\" src=\"https://avatars.io/twitter/' + username + '\" />';
       li += '<strong>' + username + '</strong>';
       li += '</li>';
       $('ul#players').append(li);

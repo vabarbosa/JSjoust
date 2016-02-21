@@ -5,6 +5,11 @@ block content
         .col-md-12
           h1.text-center Leaderboard
     .row
+      .col-md-12.text-center
+        .btn-group(role="group")
+          a.btn.btn-primary.btn-lg#asktojoin Who is game?
+          a.btn.btn-primary.btn-lg.disabled#startgame Start
+    .row
       .col-md-12
         #leaderboard
     script(type="text/javascript", src="//cdn.jsdelivr.net/pouchdb/5.2.1/pouchdb.min.js")

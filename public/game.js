@@ -153,6 +153,7 @@ $(document).ready(function () {
       channel.bind('start-' + localDB, function (data) {
         console.log('Game On');
         playGame();
+        $('.join-game').addClass('disabled');
       });
 
       channel.bind('end-' + localDB, function (data) {

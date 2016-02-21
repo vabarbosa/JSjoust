@@ -32,6 +32,7 @@ module.exports = function (server) {
         handler: (req, reply) => {
           reply.view('Game', {
             username: req.auth.credentials.username,
+            appname: process.env.APPNAME,
           });
 
         },
@@ -90,6 +91,7 @@ module.exports = function (server) {
         handler: function (request, reply) {
           reply.view('GameOver', {
             gamedb: request.params.gamedb,
+            appname: process.env.APPNAME,
           });
 
         },
@@ -158,6 +160,8 @@ module.exports = function (server) {
       path: '/leaderboard',          // The callback endpoint registered with the provider
       handler: (request, reply) => {
         reply.view('Leaderboard', {
+          title: 'Leaderboard',
+          appname: process.env.APPNAME,
         });
       },
     });

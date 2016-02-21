@@ -101,6 +101,7 @@ server.route({
       reply.view('Index', {
         title: 'Start | Hapi ' + request.server.version,
         message: 'Yo Bro!',
+        appname: process.env.APPNAME,
       });
     },
   },

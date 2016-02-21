@@ -1,0 +1,11 @@
+/* Splash Page */
+.vertical-height { height: 70vh; }
+.center-button {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+/* Game State */
+.join { background: green; }
+.lost { background: red; }
+.win { background: blue; }

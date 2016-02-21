@@ -28,9 +28,10 @@ $(document).ready(function () {
       $.each(data.rows, function (index, row) {
         addGameItem(row);
       });
+
       sortMessage();
     });
-  }
+  };
 
   var addGameItem = function (change) {
     var username = change.key[0];
@@ -56,7 +57,7 @@ $(document).ready(function () {
       arr.sort(function (a, b) {
         var textA = +$(a).find('.score').html();
         var textB = +$(b).find('.score').html();
-console.log(textA, textB);
+
         if (textA < textB) return 1;
         if (textA > textB) return -1;
 

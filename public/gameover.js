@@ -1,6 +1,9 @@
 $(document).ready(function () {
+  var GAMEON = 1;
+  var GAMEOVER = 2;
+  var state = GAMEON;
   var gameDB = PouchDB(gameDBName);
-  var api = 'https://droidconro.eu-gb.mybluemix.net?user=' + gameDBName;
+  var api = '/keygen?user=' + gameDBName;
   $.get(api, function (data) {
     gameDB.sync(data.url, { live: true, retry: true });
     gameDB.allDocs({ include_docs: true }, function (err, data) {
@@ -37,7 +40,39 @@ $(document).ready(function () {
           group_level: 1
         }, function (err, data) {
           var playersLost = data.rows[0].value;
-          $('#playersLeft').html(' ' + (playersJoined-playersLost));
+          $('#playersLeft').html(' ' + (playersJoined - playersLost));
+
+          if ((playersJoined - playersLost) === 1 &&
+            state === GAMEON) {
+            var api = '/gameover/' + gameDBName;
+            $.post(api, function (data) {
+              console.log('later loser');
+              gameDB.allDocs({include_docs: true}, function (err, data) {
+                if (err) console.log(err);
+                var winnerArray = [];
+                $.each(data.rows, function (index, row) {
+                  if (row.doc.status === 'join') {
+                    winnerArray.push(row.doc.twitter);
+                  } else if (row.doc.status === 'lost') {
+                    winnerArray.splice(winnerArray.indexOf(row.doc.twitter), 1);
+                  }
+                });
+                gameDB.put({
+                  _id: winnerArray[0] + '_win',
+                  status: 'win',
+                  twitter: winnerArray[0],
+                  timestamp: Date.now(),
+                }).then(function (response) {
+                  // handle response
+                  console.log('Everyone Informed of loss');
+                }).catch(function (err) {
+                  console.log(err);
+                });
+                state = GAMEOVER;
+                alert('Winner is ' + winnerArray[0]);
+              });
+            });
+          }
         });
       });
     };

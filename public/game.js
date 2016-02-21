@@ -155,6 +155,11 @@ $(document).ready(function () {
         console.log('Game On');
         playGame();
       });
+
+      channel.bind('end-' + localDB, function (data) {
+        console.log('Game Over');
+        window.location.href = '/gameover/' + localDB;
+      });
     });
   };
 

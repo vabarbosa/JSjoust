@@ -71,13 +71,32 @@ module.exports = function (server) {
     });
 
   server.route({
-      method: ['GET', 'POST'], // Must handle both GET and POST
+      method: ['GET'], // Must handle both GET and POST
       path: '/gameover/{gamedb}',          // The callback endpoint registered with the provider
       config: {
         auth: 'jsjoust-cookie',
         handler: function (request, reply) {
           reply.view('GameOver', {
             gamedb: request.params.gamedb,
+          });
+
+        },
+      },
+    });
+
+  server.route({
+      method: ['POST'], // Must handle both GET and POST
+      path: '/gameover/{gamedb}',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: function (request, reply) {
+
+          pusher.trigger('jsjoust-channel', 'end-' + request.params.gamedb, {
+            end: (new Date).toISOString(),
+          });
+
+          reply({
+            gameDb: request.params.gamedb,
           });
 
         },

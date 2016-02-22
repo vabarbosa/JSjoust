@@ -1,5 +1,13 @@
 $(document).ready(function () {
 
+  // Audio
+  var gameSoundTrack = new Howl({
+    urls: ['/sounds/bach-toccata-and-fugue.wav'],
+  }).load();
+  var endGameSound = new Howl({
+    urls: ['/sounds/8-bit_fail.wav'],
+  }).load();
+
   // game states
   var LOADING = 0;
   var READY = 1;
@@ -102,8 +110,15 @@ $(document).ready(function () {
       });
 
       var playGame = function () {
+        $('h1').html('Game On!');
+        document.getElementById('soundtrack').muted = false;
         trackMotion();
-        setInterval(function () { state = STARTED; }, 1000);
+        setInterval(function () {
+          state = STARTED;
+          gameSoundTrack.play();
+          document.getElementById('soundtrack').muted = false;
+          document.getElementById('soundtrack').play();
+        }, 1000);
       };
 
       var trackMotion = function () {
@@ -120,7 +135,7 @@ $(document).ready(function () {
             distance = scale(distance);
 
             // Display the changes
-            console.log(distance);
+            // console.log(distance);
             $('body').css('background', colour(distance));
 
             // Knock you out
@@ -134,7 +149,12 @@ $(document).ready(function () {
       // End Game
       var endGame = function () {
         // alert('lose');
+        endGameSound.play();
         state = LOST;
+        navigator.vibrate = navigator.vibrate ||
+                  navigator.webkitVibrate ||
+                  navigator.mozVibrate ||
+                  navigator.msVibrate;
         navigator.vibrate([3000, 2000, 1000]);
         gameDB.put({
           _id: twitterUser + '_lost',
@@ -144,7 +164,9 @@ $(document).ready(function () {
         }).then(function (response) {
           // handle response
           console.log('Everyone Informed of loss');
-          window.location.href = '/gameover/' + localDB;
+          setInterval(function () {
+            // window.location.href = '/gameover/' + localDB;
+          }, 5000);
         }).catch(function (err) {
           console.log(err);
         });

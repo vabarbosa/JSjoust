@@ -5,8 +5,11 @@ block content
         .col-md-12.vertical-height
           h1.text-center Waiting For Game
           ul#players
+    audio#soundtrack(controls loop preload autoplay)
+      source(src="/sounds/bach-toccata-and-fugue.wav")
     script(type="text/javascript")
       | var twitterUser = '#{username}';
     script(type="text/javascript", src="//cdn.jsdelivr.net/pouchdb/5.2.1/pouchdb.min.js")
+    script(type="text/javascript", src="https://cdnjs.cloudflare.com/ajax/libs/howler/1.1.29/howler.min.js")
     script(type="text/javascript", src="https://js.pusher.com/3.0/pusher.min.js")
     script(type="text/javascript", src="/game.js")

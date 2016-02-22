@@ -32,7 +32,7 @@ $(document).ready(function () {
   var channel = pusher.subscribe('jsjoust-channel');
 
   channel.bind('join', function (data) {
-    var joinGameLink = '<a class=\"btn btn-primary join-game\" data-game-db=\"' + data.gameDb + '\">Join Game</a>';
+    var joinGameLink = '<a class=\"button_primary join-game\" data-game-db=\"' + data.gameDb + '\">Join Game</a>';
     $('h1').html(joinGameLink);
     $('.join-game').on('click', function (e) {
       e.preventDefault();

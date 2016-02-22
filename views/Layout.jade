@@ -3,6 +3,7 @@ html
   body
     header.capped-layout_cap.app-banner
       a.app-banner_title(rel="home", href="https://developer.ibm.com/clouddataservices") IBM Cloud Data Services // Dev
-    .container
-      block content
-    include includes/foot
+    .bookend-layout_body.theme_light.scrollable-y
+      section.layout_section.theme_light.bg_white
+        block content
+      include includes/foot

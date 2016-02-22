@@ -17,3 +17,28 @@ ul#players li {
 .join { background: green; }
 .lost { background: red; }
 .win { background: blue; }
+
+
+footer {
+	bottom: 0;
+    position: fixed;
+    width: 100%;
+}
+footer.layout_section {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    text-align: right;
+}
+.index-content {
+	text-align: center;
+}
+#asktojoin {
+	margin-right: 10px;
+}
+#startgame {
+	margin-left: 10px;
+}
+.join img {
+	margin-right: 20px;
+    vertical-align: middle;
+}

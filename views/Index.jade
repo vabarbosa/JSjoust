@@ -1,11 +1,13 @@
 extends Layout
 
 block content
+  .index-content
     .row
         .col-md-12.text-center
-            h1 #{appname}
+            h1 
+              mark.type_mark #{appname}
     .row
         .col-md-12.text-center.vertical-height
-            a.btn.btn-lg.btn-primary.center-button(href="/login") 
+            a.button_primary.center-button(href="/login") 
                 i.fa.fa-twitter
                 |  Login with Twitter

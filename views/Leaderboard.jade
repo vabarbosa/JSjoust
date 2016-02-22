@@ -1,17 +1,14 @@
 extends Layout
 
 block content
-    .row
-        .col-md-12
-          h1.text-center Leaderboard
-    .row
-      .col-md-12.text-center
-        .btn-group(role="group")
-          a.btn.btn-primary.btn-lg#asktojoin Who is game?
-          a.btn.btn-primary.btn-lg.disabled#startgame Start
-    .row
-      .col-md-12
-        #leaderboard
+  .index-content
+    h1
+      mark.type_mark Leaderboard
+    p
+      span.button_group(role="group")
+        a.button_primary#asktojoin Who is game?
+        a.button_primary.disabled#startgame Start
+    div#leaderboard
     script(type="text/javascript", src="//cdn.jsdelivr.net/pouchdb/5.2.1/pouchdb.min.js")
     script(type="text/javascript", src="https://js.pusher.com/3.0/pusher.min.js")
     script(type="text/javascript", src="/leaderboard.js")

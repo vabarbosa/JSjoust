@@ -1,9 +1,11 @@
 extends Layout
 
 block content
+  .index-content
     .row
         .col-md-12.vertical-height
-          h1.text-center Waiting For Game
+          h1.text-center
+            mark.type_mark Waiting For Game
           ul#players
     audio#soundtrack(autoplay)
       source(src="/sounds/bach-toccata-and-fugue.mp3", type="audio/mpeg")

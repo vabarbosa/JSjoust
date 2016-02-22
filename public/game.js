@@ -2,7 +2,9 @@ $(document).ready(function () {
 
   // Audio
   var gameSoundTrack = new Howl({
-    urls: ['/sounds/bach-toccata-and-fugue.wav'],
+    urls: [
+      '/sounds/bach-toccata-and-fugue.mp3',
+    ],
   }).load();
   var endGameSound = new Howl({
     urls: ['/sounds/8-bit_fail.wav'],
@@ -40,6 +42,12 @@ $(document).ready(function () {
   });
 
   var joinGame = function (gameDB) {
+    // Sound Hack
+    gameSoundTrack.pause();
+    gameSoundTrack.play();
+    gameSoundTrack.pause();
+
+    // Actually join
     var api = '/keygen?user=' + gameDB;
     $.get(api, function (data) {
       localStorage.setItem('url', data.url);
@@ -149,13 +157,13 @@ $(document).ready(function () {
       // End Game
       var endGame = function () {
         // alert('lose');
-        endGameSound.play();
         state = LOST;
-        navigator.vibrate = navigator.vibrate ||
-                  navigator.webkitVibrate ||
-                  navigator.mozVibrate ||
-                  navigator.msVibrate;
-        navigator.vibrate([3000, 2000, 1000]);
+        endGameSound.play();
+        // navigator.vibrate = navigator.vibrate ||
+        //           navigator.webkitVibrate ||
+        //           navigator.mozVibrate ||
+        //           navigator.msVibrate;
+        // navigator.vibrate([3000, 2000, 1000]);
         gameDB.put({
           _id: twitterUser + '_lost',
           status: 'lost',
@@ -164,9 +172,10 @@ $(document).ready(function () {
         }).then(function (response) {
           // handle response
           console.log('Everyone Informed of loss');
+          $('h1').html('You lose!');
           setInterval(function () {
-            // window.location.href = '/gameover/' + localDB;
-          }, 5000);
+            window.location.href = '/gameover/' + localDB;
+          }, 1000);
         }).catch(function (err) {
           console.log(err);
         });
@@ -185,11 +194,13 @@ $(document).ready(function () {
 
       channel.bind('safe-' + localDB, function (data) {
         console.log('You can move more');
+        gameSoundTrack.pause();
         state = SAFE;
       });
 
       channel.bind('notsafe-' + localDB, function (data) {
         console.log('Ow Shit, stop moving!');
+        gameSoundTrack.play();
         state = STARTED;
       });
     });

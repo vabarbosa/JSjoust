@@ -61,7 +61,7 @@ $(document).ready(function () {
         $('div[data-twitter="' + username + '"] .score').html(change.value)
       } else {
         var li = '<div class="row" data-twitter=\"' + username + '\">';
-        li += '<div class="col-md-2" ><img width="100%" src=\"https://avatars.io/twitter/' + username + '\" class=" img-circle" /></div>';
+        li += '<div class="col-md-2" ><img width="inherit" src=\"https://avatars.io/twitter/' + username + '\" class=" img-circle" /></div>';
         li += '<div class="col-md-7" ><h2>' + username + '</h2></div>'
         li += '<div class="col-md-2 text-center"><h1 class="score" >' + change.value + '</h1></div>';
         li += '</div>';

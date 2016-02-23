@@ -100,7 +100,7 @@ server.route({
     },
     handler: (request, reply) => {
       reply.view('Index', {
-        title: 'Start | Hapi ' + request.server.version,
+        title: 'Let\'s play',
         message: 'Yo Bro!',
         appname: process.env.APPNAME,
       });

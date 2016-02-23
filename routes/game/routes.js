@@ -137,10 +137,10 @@ module.exports = function (server) {
               console.log('insert', body);
           });
 
-        reply({
-          gameDb: request.params.gameDB,
-          winner: request.params.twitter,
-        });
+          reply({
+            gameDb: request.params.gameDB,
+            winner: request.params.twitter,
+          });
         },
       },
     });

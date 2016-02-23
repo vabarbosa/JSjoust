@@ -126,33 +126,21 @@ module.exports = function (server) {
         auth: 'jsjoust-cookie',
         handler: (request, reply) => {
           var leaderDB = cloudant.use('leaderboard');
-
-// limit=20&reduce=true&inclusive_end=true&start_key=%5B%22ukmadlz%22%2C%22gamedb_1456021545385%22%5D&end_key=%5B%22ukmadlz%22%2C%22gamedb_1456021545385%22%5D&group=true
-          leaderDB.view('leaderboard', 'scorecheck', {
-            start_key: [request.params.twitter, request.params.gameDB],
-            end_key: [request.params.twitter, request.params.gameDB],
-            group: true,
-            group_level: 1,
-            reduce: true,
-            inclusive_end: true,
-          }, function (err, data) {
-            if (err) console.log(err);
-            if (true) {
-              leaderDB.insert({
-                twitter: request.params.twitter,
-                game: request.params.gameDB,
-                timestamp: Date.now(),
-              }, function (err, body) {
-                if (!err)
-                  console.log('insert', body);
-              });
-            }
-
-            reply({
-              gameDb: request.params.gameDB,
-              winner: request.params.twitter,
-            });
+          leaderDB.insert({
+            twitter: request.params.twitter,
+            game: request.params.gameDB,
+            timestamp: Date.now(),
+          },
+          request.params.twitter + '__' + request.params.gameDB,
+          function (err, body) {
+            if (!err)
+              console.log('insert', body);
           });
+
+        reply({
+          gameDb: request.params.gameDB,
+          winner: request.params.twitter,
+        });
         },
       },
     });

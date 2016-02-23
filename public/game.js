@@ -9,6 +9,7 @@ $(document).ready(function () {
   var endGameSound = new Howl({
     urls: ['/sounds/8-bit_fail.wav'],
   }).load();
+  document.getElementById('soundtrack').muted = true;
 
   // game states
   var LOADING = 0;
@@ -37,7 +38,7 @@ $(document).ready(function () {
     $('.join-game').on('click', function (e) {
       e.preventDefault();
       console.log($(this).attr('data-game-db'));
-      joinGame(data.gameDb);
+      joinGame($(this).attr('data-game-db'));
     });
   });
 
@@ -119,13 +120,12 @@ $(document).ready(function () {
 
       var playGame = function () {
         $('h1').html('Game On!');
-        document.getElementById('soundtrack').muted = false;
         trackMotion();
         setInterval(function () {
           state = STARTED;
           gameSoundTrack.play();
-          document.getElementById('soundtrack').muted = false;
-          document.getElementById('soundtrack').play();
+          // document.getElementById('soundtrack').muted = false;
+          // document.getElementById('soundtrack').play();
         }, 1000);
       };
 

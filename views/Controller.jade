@@ -1,0 +1,19 @@
+extends Layout
+
+block content
+    .row
+        .col-md-12
+          h1.text-center Controller
+          p
+            span.button_group(role="group")
+              a.button_primary#asktojoin Who is game?
+              a.button_primary.disabled#startgame Start
+          ul#players
+          h2#playersLeftArea Players Left
+           strong#playersLeft
+          span.button_group(role="group")
+            a.button_primary(href="/controller") New Game
+    script(type="text/javascript")
+      | var gameDBName = '#{gamedb}';
+    script(type="text/javascript", src="//cdn.jsdelivr.net/pouchdb/5.2.1/pouchdb.min.js")
+    script(type="text/javascript", src="/controller.js")

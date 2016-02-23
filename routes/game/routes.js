@@ -156,4 +156,32 @@ module.exports = function (server) {
       },
     });
 
+  var controllerPage = function (request, reply) {
+    var gameDB = request.params.gamedb || false;
+    reply.view('Controller', {
+        title: 'Controller',
+        gamedb: gameDB,
+        appname: process.env.APPNAME,
+      });
+
+  };
+
+  server.route({
+      method: ['GET'], // Must handle both GET and POST
+      path: '/controller',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: controllerPage,
+      },
+    });
+
+  server.route({
+      method: ['GET'], // Must handle both GET and POST
+      path: '/controller/{gamedb}',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: controllerPage,
+      },
+    });
+
 };

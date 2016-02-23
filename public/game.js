@@ -6,6 +6,7 @@ $(document).ready(function () {
       '/sounds/bach-toccata-and-fugue.mp3',
     ],
   }).load();
+  var gameSoundTrackPlay = [];
   var endGameSound = new Howl({
     urls: ['/sounds/8-bit_fail.wav'],
   }).load();
@@ -123,7 +124,9 @@ $(document).ready(function () {
         trackMotion();
         setInterval(function () {
           state = STARTED;
-          gameSoundTrack.play();
+          if (!gameSoundTrackPlay.length) {
+            gameSoundTrackPlay.push(gameSoundTrack.play());
+          }
           // document.getElementById('soundtrack').muted = false;
           // document.getElementById('soundtrack').play();
         }, 1000);
@@ -145,6 +148,7 @@ $(document).ready(function () {
             // Display the changes
             // console.log(distance);
             $('body').css('background', colour(distance));
+            $('.layout_section').css('background', colour(distance));
 
             // Knock you out
             if (tooFast(distance)) {
@@ -158,6 +162,7 @@ $(document).ready(function () {
       var endGame = function () {
         // alert('lose');
         state = LOST;
+        gameSoundTrack.pause()
         endGameSound.play();
         // navigator.vibrate = navigator.vibrate ||
         //           navigator.webkitVibrate ||

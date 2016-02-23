@@ -21,8 +21,9 @@ ul#players li {
 
 footer {
 	bottom: 0;
-    position: fixed;
-    width: 100%;
+  position: fixed;
+  width: 100%;
+  font-size: 0.5rem;
 }
 footer.layout_section {
     padding-top: 0px;

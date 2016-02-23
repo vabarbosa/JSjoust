@@ -7,8 +7,8 @@ block content
           ul#players
           h2#playersLeftArea Players Left
            strong#playersLeft
-          h2
-            a.btn.btn-primary(href="/game") New Game
+          span.button_group(role="group")
+            a.button_primary(href="/game") New Game
     script(type="text/javascript")
       | var gameDBName = '#{gamedb}';
     script(type="text/javascript", src="//cdn.jsdelivr.net/pouchdb/5.2.1/pouchdb.min.js")

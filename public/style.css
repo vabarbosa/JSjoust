@@ -41,5 +41,17 @@ footer.layout_section {
 }
 .join img {
 	margin-right: 20px;
-    vertical-align: middle;
+  vertical-align: middle;
+}
+/* Leaderboard */
+#leaderboard .row {
+  padding: 1rem;
+  clear: both;
+}
+#leaderboard .row img {
+  width: 10rem;
+  padding-right: 1rem;
+}
+#leaderboard .row .col-md-2, #leaderboard .row .col-md-7 {
+  float: left;
 }

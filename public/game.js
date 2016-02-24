@@ -199,13 +199,13 @@ $(document).ready(function () {
 
       channel.bind('safe-' + localDB, function (data) {
         console.log('You can move more');
-        gameSoundTrack.pause();
+        gameSoundTrack.mute();
         state = SAFE;
       });
 
       channel.bind('notsafe-' + localDB, function (data) {
         console.log('Ow Shit, stop moving!');
-        gameSoundTrack.play();
+        gameSoundTrack.unmute();
         state = STARTED;
       });
     });

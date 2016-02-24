@@ -184,4 +184,42 @@ module.exports = function (server) {
       },
     });
 
+  server.route({
+      method: ['POST'], // Must handle both GET and POST
+      path: '/state/safe/{gamedb}',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: function (request, reply) {
+
+          pusher.trigger('jsjoust-channel', 'safe-' + request.params.gamedb, {
+            safe: (new Date).toISOString(),
+          });
+
+          reply({
+            gameDb: request.params.gamedb,
+          });
+
+        },
+      },
+    });
+
+  server.route({
+      method: ['POST'], // Must handle both GET and POST
+      path: '/state/active/{gamedb}',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: function (request, reply) {
+
+          pusher.trigger('jsjoust-channel', 'notsafe-' + request.params.gamedb, {
+            notsafe: (new Date).toISOString(),
+          });
+
+          reply({
+            gameDb: request.params.gamedb,
+          });
+
+        },
+      },
+    });
+
 };

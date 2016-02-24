@@ -1,20 +1,31 @@
 $(document).ready(function () {
 
+  var WAITING = 'Waiting';
+  var PLAYING  = 'Playing';
+  var SAFE     = 'Safe';
+  var GAMEOVER = 'Game Over!';
+  var gameState = WAITING;
+
   // Get people to join
-  $('#asktojoin').on('click', function(e) {
+  $('#asktojoin').on('click', function (e) {
     e.preventDefault();
     var joinurl = '/join';
     $.get(joinurl, function (data) {
       window.location.href = '/controller/' + data.gameDb;
     });
   });
+
   $('#startgame').on('click', function (err, data) {
     var starturl = '/start/' + gameDBName;
     $.get(starturl, function (data) {
+      gameState = PLAYING;
+      $('#gameState').html(gameState);
+      flipSafeStatus(gameDBName);
     });
   });
 
   if (gameDBName) {
+    $('#gameState').html(gameState);
     var GAMEON = 1;
     var GAMEOVER = 2;
     var state = GAMEON;
@@ -28,75 +39,6 @@ $(document).ready(function () {
         });
       });
 
-      var winner = function () {
-
-        var mapRed = {
-          map: function (doc) {
-            if (doc.status) {
-              emit([doc.status, doc.twitter], doc);
-            }
-          },
-          reduce: '_count',
-        };
-        gameDB.query(mapRed, {
-          reduce: true,
-          inclusive_end: true,
-          startkey: ['join'],
-          endkey: ['join', {}],
-          group: true,
-          group_level: 1
-        }, function (err, data) {
-          var playersJoined = data.rows[0].value;
-          gameDB.query(mapRed, {
-            reduce: true,
-            inclusive_end: true,
-            startkey: ['lost'],
-            endkey: ['lost', {}],
-            group: true,
-            group_level: 1
-          }, function (err, data) {
-            var playersLost = (data.rows.length) ? data.rows[0].value : 0;
-            $('#playersLeft').html(' ' + (playersJoined - playersLost));
-
-            if ((playersJoined - playersLost) === 1 &&
-              state === GAMEON) {
-              var api = '/gameover/' + gameDBName;
-              $.post(api, function (data) {
-                console.log('later loser');
-                gameDB.allDocs({include_docs: true}, function (err, data) {
-                  if (err) console.log(err);
-                  var winnerArray = [];
-                  $.each(data.rows, function (index, row) {
-                    if (row.doc.status === 'join') {
-                      winnerArray.push(row.doc.twitter);
-                    } else if (row.doc.status === 'lost') {
-                      winnerArray.splice(winnerArray.indexOf(row.doc.twitter), 1);
-                    }
-                  });
-                  gameDB.put({
-                    _id: winnerArray[0] + '_win',
-                    status: 'win',
-                    twitter: winnerArray[0],
-                    timestamp: Date.now(),
-                  }).then(function (response) {
-                    // handle response
-                    console.log('Everyone Informed of Win');
-                  }).catch(function (err) {
-                    console.log(err);
-                  });
-                  state = GAMEOVER;
-                  $('h1').html('Winner is ' + winnerArray[0]);
-                  var api = '/leaderboard/' + winnerArray[0] + '/' + gameDBName;
-                  $.post(api, function (data) {
-                    $('#playersLeftArea').remove();
-                  });
-                });
-              });
-            }
-          });
-        });
-      };
-
       var changes = gameDB.changes({
         live: true,
         retry: true,
@@ -104,7 +46,6 @@ $(document).ready(function () {
       }).on('change', function (change) {
         // handle change
         addGameItem(change);
-        winner();
       }).on('complete', function (info) {
         // changes() was canceled
         console.log('Change Cancelled');
@@ -113,6 +54,20 @@ $(document).ready(function () {
       });
     });
   }
+
+  var flipSafeStatus = function (gameDBName) {
+    gameState = (gameState === PLAYING) ? SAFE : PLAYING;
+    var url = '/state/' + (((gameState === PLAYING)) ? 'safe' : 'active') + '/' + gameDBName;
+    $.post(url, function (err, data) {
+      var delay = Math.floor((Math.random() * 20000) + 5000);
+      console.log(delay);
+      console.log(gameState);
+      $('#gameState').html(gameState);
+      setTimeout(function () {
+        flipSafeStatus(gameDBName);
+      }, delay);
+    });
+  };
 });
 
 var addGameItem = function (change) {

@@ -6,9 +6,11 @@ $(document).ready(function () {
       '/sounds/bach-toccata-and-fugue.mp3',
     ],
   }).load();
+  var gameSoundTrackPlay = [];
   var endGameSound = new Howl({
     urls: ['/sounds/8-bit_fail.wav'],
   }).load();
+  document.getElementById('soundtrack').muted = true;
 
   // game states
   var LOADING = 0;
@@ -37,7 +39,7 @@ $(document).ready(function () {
     $('.join-game').on('click', function (e) {
       e.preventDefault();
       console.log($(this).attr('data-game-db'));
-      joinGame(data.gameDb);
+      joinGame($(this).attr('data-game-db'));
     });
   });
 
@@ -119,13 +121,14 @@ $(document).ready(function () {
 
       var playGame = function () {
         $('h1').html('Game On!');
-        document.getElementById('soundtrack').muted = false;
         trackMotion();
         setInterval(function () {
           state = STARTED;
-          gameSoundTrack.play();
-          document.getElementById('soundtrack').muted = false;
-          document.getElementById('soundtrack').play();
+          if (!gameSoundTrackPlay.length) {
+            gameSoundTrackPlay.push(gameSoundTrack.play());
+          }
+          // document.getElementById('soundtrack').muted = false;
+          // document.getElementById('soundtrack').play();
         }, 1000);
       };
 
@@ -145,6 +148,7 @@ $(document).ready(function () {
             // Display the changes
             // console.log(distance);
             $('body').css('background', colour(distance));
+            $('.layout_section').css('background', colour(distance));
 
             // Knock you out
             if (tooFast(distance)) {
@@ -158,6 +162,7 @@ $(document).ready(function () {
       var endGame = function () {
         // alert('lose');
         state = LOST;
+        gameSoundTrack.pause()
         endGameSound.play();
         // navigator.vibrate = navigator.vibrate ||
         //           navigator.webkitVibrate ||
@@ -194,13 +199,13 @@ $(document).ready(function () {
 
       channel.bind('safe-' + localDB, function (data) {
         console.log('You can move more');
-        gameSoundTrack.pause();
+        gameSoundTrack.mute();
         state = SAFE;
       });
 
       channel.bind('notsafe-' + localDB, function (data) {
         console.log('Ow Shit, stop moving!');
-        gameSoundTrack.play();
+        gameSoundTrack.unmute();
         state = STARTED;
       });
     });

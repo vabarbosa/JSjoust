@@ -12,6 +12,7 @@ var Vision         = require('vision');
 var Yar            = require('yar');
 var HapiAuthCookie = require('hapi-auth-cookie');
 var dateFormat     = require('dateformat');
+var Cloudant       = require('cloudant');
 
 // format
 var format = 'd mmm HH:MM:ss';
@@ -99,7 +100,7 @@ server.route({
     },
     handler: (request, reply) => {
       reply.view('Index', {
-        title: 'Start | Hapi ' + request.server.version,
+        title: 'Let\'s play',
         message: 'Yo Bro!',
         appname: process.env.APPNAME,
       });

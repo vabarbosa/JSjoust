@@ -126,32 +126,20 @@ module.exports = function (server) {
         auth: 'jsjoust-cookie',
         handler: (request, reply) => {
           var leaderDB = cloudant.use('leaderboard');
+          leaderDB.insert({
+            twitter: request.params.twitter,
+            game: request.params.gameDB,
+            timestamp: Date.now(),
+          },
+          request.params.twitter + '__' + request.params.gameDB,
+          function (err, body) {
+            if (!err)
+              console.log('insert', body);
+          });
 
-// limit=20&reduce=true&inclusive_end=true&start_key=%5B%22ukmadlz%22%2C%22gamedb_1456021545385%22%5D&end_key=%5B%22ukmadlz%22%2C%22gamedb_1456021545385%22%5D&group=true
-          leaderDB.view('leaderboard', 'scorecheck', {
-            start_key: [request.params.twitter, request.params.gameDB],
-            end_key: [request.params.twitter, request.params.gameDB],
-            group: true,
-            group_level: 1,
-            reduce: true,
-            inclusive_end: true,
-          }, function (err, data) {
-            if (err) console.log(err);
-            if (true) {
-              leaderDB.insert({
-                twitter: request.params.twitter,
-                game: request.params.gameDB,
-                timestamp: Date.now(),
-              }, function (err, body) {
-                if (!err)
-                  console.log('insert', body);
-              });
-            }
-
-            reply({
-              gameDb: request.params.gameDB,
-              winner: request.params.twitter,
-            });
+          reply({
+            gameDb: request.params.gameDB,
+            winner: request.params.twitter,
           });
         },
       },
@@ -165,6 +153,72 @@ module.exports = function (server) {
           title: 'Leaderboard',
           appname: process.env.APPNAME,
         });
+      },
+    });
+
+  var controllerPage = function (request, reply) {
+    var gameDB = request.params.gamedb || false;
+    reply.view('Controller', {
+        title: 'Controller',
+        gamedb: gameDB,
+        appname: process.env.APPNAME,
+      });
+
+  };
+
+  server.route({
+      method: ['GET'], // Must handle both GET and POST
+      path: '/controller',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: controllerPage,
+      },
+    });
+
+  server.route({
+      method: ['GET'], // Must handle both GET and POST
+      path: '/controller/{gamedb}',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: controllerPage,
+      },
+    });
+
+  server.route({
+      method: ['POST'], // Must handle both GET and POST
+      path: '/state/safe/{gamedb}',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: function (request, reply) {
+
+          pusher.trigger('jsjoust-channel', 'safe-' + request.params.gamedb, {
+            safe: (new Date).toISOString(),
+          });
+
+          reply({
+            gameDb: request.params.gamedb,
+          });
+
+        },
+      },
+    });
+
+  server.route({
+      method: ['POST'], // Must handle both GET and POST
+      path: '/state/active/{gamedb}',          // The callback endpoint registered with the provider
+      config: {
+        auth: 'jsjoust-cookie',
+        handler: function (request, reply) {
+
+          pusher.trigger('jsjoust-channel', 'notsafe-' + request.params.gamedb, {
+            notsafe: (new Date).toISOString(),
+          });
+
+          reply({
+            gameDb: request.params.gamedb,
+          });
+
+        },
       },
     });
 
